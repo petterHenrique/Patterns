@@ -8,47 +8,60 @@ namespace Patterns
         {
             Console.WriteLine("==== Buscando o controle remoto =====");
 
-            var controleRemotoInteligente = new ControleRemotoInteligente();
+            var commandoLuz = new CommandLuz() { 
+                Forca = "250wh",
+                TipoLuz = "Incandesente"
+            };
 
-            controleRemotoInteligente.On(new LigarLuz());
+            var commandoTv = new CommandTv()
+            {
+                MarcaTv = "LG",
+                TipoTv = "PLASMA"
+            };
 
-            controleRemotoInteligente.On(new LigarTv());
+            var executarLuz = new LigarLuz();
+            executarLuz.Execute(commandoLuz);
+
+            var executarTv = new LigarTv();
+            executarTv.Execute(commandoTv);
         }
     }
 
-
-    public class ControleRemotoInteligente // invoker
+    public class LigarLuz : ICommand<CommandLuz>
     {
-        public ControleRemotoInteligente()
+        public void Execute(CommandLuz command)
         {
-
-        }
-
-        public void On(ICommand command)
-        {
-            command.Execute();
+            Console.WriteLine("Tipo Da luz é " + command.TipoLuz + " Força da luz é " + command.Forca);
         }
     }
 
-
-    public class LigarLuz : ICommand
+    public class LigarTv : ICommand<CommandTv>
     {
-        public void Execute()
+        public void Execute(CommandTv command)
         {
-            Console.WriteLine("Ligou a luz");
+            Console.WriteLine("Marca da TV é "+command.MarcaTv + " Tipo da TV é "+ command.TipoTv);
         }
     }
 
-    public class LigarTv : ICommand
+    public interface ICommand<T>
     {
-        public void Execute()
-        {
-            Console.WriteLine("Ligar a Tv");
-        }
+        void Execute(T command);
     }
 
-    public interface ICommand
+    public class CommandLuz
     {
-        void Execute();
+        public CommandLuz() { }
+        public string TipoLuz { get; set; }
+        public string Forca { get; set; }
+    }
+
+    public class CommandTv
+    {
+        public CommandTv()
+        {
+
+        }
+        public string TipoTv { get; set; }
+        public string MarcaTv { get; set; }
     }
 }
