@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Patterns
 {
@@ -8,22 +9,54 @@ namespace Patterns
         {
             Console.WriteLine("==== Buscando o controle remoto =====");
 
-            var commandoLuz = new CommandLuz() { 
-                Forca = "250wh",
-                TipoLuz = "Incandesente"
-            };
+            //var commandoLuz = new CommandLuz() { 
+            //    Forca = "250wh",
+            //    TipoLuz = "Incandesente"
+            //};
 
-            var commandoTv = new CommandTv()
+            //var commandoTv = new CommandTv()
+            //{
+            //    MarcaTv = "LG",
+            //    TipoTv = "PLASMA"
+            //};
+
+            //var executarLuz = new LigarLuz();
+            //executarLuz.Execute(commandoLuz);
+
+            //var executarTv = new LigarTv();
+            //executarTv.Execute(commandoTv);
+
+
+            var pedido = new PedidoGeradoCommand
             {
-                MarcaTv = "LG",
-                TipoTv = "PLASMA"
+                IdPedido = 1,
+                IdCliente = 1,
+                produtos = new List<string>() { "1", "2" }
             };
 
-            var executarLuz = new LigarLuz();
-            executarLuz.Execute(commandoLuz);
 
-            var executarTv = new LigarTv();
-            executarTv.Execute(commandoTv);
+            //_servicoPedido.saveChanges();
+
+            var commandoPedido = new PedidoHandler();
+            commandoPedido.Execute(pedido);
+        }
+    }
+
+
+    public class PedidoGeradoCommand
+    {
+        public int IdPedido { get; set; }
+        public int IdCliente { get; set; }
+        public List<string> produtos { get; set; }
+    }
+
+    public class PedidoHandler : ICommand<PedidoGeradoCommand>
+    {
+        public void Execute(PedidoGeradoCommand command)
+        {
+            Console.WriteLine("Disparar relatório de pedido email");
+
+            Console.WriteLine("Envia notificação push de venda");
         }
     }
 
